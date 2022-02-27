@@ -1,3 +1,5 @@
+@import url("https://fonts.googleapis.com/css2?family=Nunito:ital,wght@0,200;0,300;0,400;0,500;0,600;0,700;0,800;0,900;1,200;1,300;1,400&display=swap");
+
 .App {
   text-align: center;
 }
@@ -35,4 +37,125 @@
   to {
     transform: rotate(360deg);
   }
+}
+
+/* /// prince css  */
+
+body {
+  background-color: #101533;
+  font-family: "Nunito", sans-serif;
+}
+
+.input-div {
+  align-items: center;
+  display: flex;
+  width: 100%;
+  margin: 10px auto;
+}
+
+.input-div span {
+  color: white;
+  margin-right: 10px;
+  width: 200px;
+}
+
+.custom-input {
+  background-color: #e0ccfb;
+  border: none;
+  width: 100%;
+  border-radius: 4px;
+  padding: 6px;
+  outline: none;
+  border-bottom: 1px solid #9752f1;
+}
+
+.custom-form {
+  background: #1b203d;
+  width: 460px;
+  padding: 20px;
+  margin: 20px auto;
+  border-radius: 4px;
+  box-shadow: 2px 2px rgba(0, 0, 0, 0.2);
+}
+
+.custom-btn-grp {
+  width: 100%;
+  margin: 10px auto;
+}
+
+.w-max {
+  width: max-content !important;
+}
+
+.custom-btn {
+  margin: 4px;
+  width: 100%;
+  padding: 6px;
+  color: white;
+  border: none;
+  outline: none;
+  background-color: #9752f1;
+  border-radius: 4px;
+  font-size: 14px;
+  font-weight: 600;
+}
+
+.custom-pool-div {
+  background: #010920;
+  color: white;
+
+  padding: 40px 10px;
+}
+
+.custom-pool-div span {
+  font-size: 16px;
+  color: rgba(255, 255, 255, 0.6);
+}
+
+.custom-nft-div {
+  color: white;
+}
+
+.custom-nft-img-div {
+  position: relative;
+}
+.custom-nft-img-div img {
+  width: 100%;
+
+  /* border-radius: 4px; */
+}
+
+.custom-nft-img-div button {
+  position: absolute;
+  top: 0;
+  right: 0;
+}
+
+.custom-nft-img-div btnDiv {
+  position: absolute;
+  top: 0;
+  right: 0;
+}
+
+.resonsive-div {
+  display: flex;
+  flex-wrap: wrap;
+}
+
+.custom-nft-card {
+  color: white;
+  margin: 10px;
+
+  overflow: hidden;
+  display: inline-block;
+  border-radius: 4px;
+  padding: 10px 0 0;
+  width: 200px;
+  /* margin: 10px; */
+  background: #010920;
+}
+
+.custom-nft-card h4 {
+  padding-left: 10px;
+  font-size: 18px;
 }
