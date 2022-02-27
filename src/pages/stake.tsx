@@ -49,7 +49,7 @@ const confirmOption: ConfirmOptions = {
   skipPreflight: false,
 };
 
-const REWARD_TOKEN = "C5XF7wCq62CW1cDEha38yv3h5jxEVyCDJWmnYKGrBk9q";
+const REWARD_TOKEN = "Azw7nHFCUrY3i2RpRLxJja1mooiZkAai3ipsmQTeMqNQ";
 let POOL = new PublicKey("DYmvEKaRDK1agdYEjnfe9sk2SxNeJ4FXSAjWgedy2cEe");
 const STAKEDATA_SIZE = 8 + 1 + 32 + 32 + 32 + 8 + 1;
 const createAssociatedTokenAccountInstruction = (
