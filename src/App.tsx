@@ -21,6 +21,7 @@ import { WalletConnect } from "./wallet";
 import Stake from "./pages/stake";
 import "./bootstrap.min.css";
 import "./App.css";
+import Logo from "./assets/logo.png";
 import "@solana/wallet-adapter-react-ui/styles.css";
 export default function App() {
   const network = WalletAdapterNetwork.Devnet;
@@ -32,10 +33,10 @@ export default function App() {
         <WalletModalProvider>
           <SnackbarProvider>
             <div
-              className="d-flex justify-content-between align-items-center px-4 py-2"
+              className="d-flex justify-content-between align-items-center px-4 py-2 my-navbar"
               style={{ background: "#E0CCFB" }}
             >
-              <h3>Logo</h3>
+              <img className="logo" src={Logo} alt="" />
               <WalletConnect />
             </div>
             <Stake />

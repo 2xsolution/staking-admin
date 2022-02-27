@@ -46,6 +46,13 @@ body {
   font-family: "Nunito", sans-serif;
 }
 
+.logo {
+  width: 100px;
+  height: auto;
+  transform: scale(2.2);
+  cursor: pointer;
+}
+
 .input-div {
   align-items: center;
   display: flex;
@@ -158,4 +165,21 @@ body {
 .custom-nft-card h4 {
   padding-left: 10px;
   font-size: 18px;
+}
+
+.loader {
+  overflow: hidden;
+  margin: 0 !important;
+  position: fixed;
+  top: 0;
+  right: 0;
+  flex-direction: column;
+  left: 0;
+  bottom: 0;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  background-color: rgba(0, 0, 0, 0.8);
+  z-index: 10000000000 !important;
+  color: white;
 }

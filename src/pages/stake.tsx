@@ -29,6 +29,7 @@ import {
   clusterApiUrl,
 } from "@solana/web3.js";
 import axios from "axios";
+import Loader from "../components/Loader";
 
 let wallet: any;
 let conn = new Connection(clusterApiUrl("devnet"));
@@ -490,8 +491,18 @@ export default function Stake() {
     init = false;
     getNfts(render);
   }
+
+  const [isLoading, setIsLoading] = useState(false);
+  const [loadingMessage, setLoadingMessage] = useState("");
+
+  const stopLoading = () => {
+    setLoadingMessage("");
+    setIsLoading(false);
+  };
+
   return (
     <div className="container-fluid mt-4">
+      {isLoading && <Loader text={loadingMessage} />}{" "}
       <div className="custom-form">
         <div className="input-div">
           <span>Reward amount</span>
@@ -558,6 +569,9 @@ export default function Stake() {
           <button
             className="custom-btn dark-btn"
             onClick={async () => {
+              setIsLoading(true);
+              setLoadingMessage("Creating Staking Pool");
+
               POOL = await initPool(
                 new PublicKey(rewardToken),
                 rewardAmount,
@@ -566,6 +580,7 @@ export default function Stake() {
                 collectionName
               );
               render();
+              stopLoading();
             }}
           >
             Create Staking Pool
@@ -573,7 +588,9 @@ export default function Stake() {
           <button
             className="custom-btn dark-btn"
             onClick={async () => {
-              await getPoolData(render);
+              setIsLoading(true);
+              setLoadingMessage("Fetching Pool Data");
+              await getPoolData(render).then(() => stopLoading());
             }}
           >
             Get Pool Data
@@ -581,7 +598,9 @@ export default function Stake() {
           <button
             className="custom-btn dark-btn"
             onClick={async () => {
-              await getNfts(render);
+              setIsLoading(true);
+              setLoadingMessage("Redirecting");
+              await getNfts(render).then(() => stopLoading());
             }}
           >
             Redirect
@@ -710,7 +729,11 @@ export default function Stake() {
               type="button"
               className="w-max custom-btn m-1"
               onClick={async () => {
-                await getClaimAmount(conn, wallet.publicKey);
+                setIsLoading(true);
+                setLoadingMessage("Getting Claim Amount");
+                await getClaimAmount(conn, wallet.publicKey).then(() =>
+                  stopLoading()
+                );
                 render();
               }}
             >
@@ -720,8 +743,12 @@ export default function Stake() {
               type="button"
               className="w-max custom-btn m-1 "
               onClick={async () => {
+                setIsLoading(true);
+                setLoadingMessage("Please wait! Getting your Claim");
                 await claim();
-                await getClaimAmount(conn, wallet.publicKey);
+                await getClaimAmount(conn, wallet.publicKey).then(() =>
+                  stopLoading()
+                );
                 render();
               }}
             >
@@ -774,7 +801,9 @@ export default function Stake() {
                     <button
                       className="custom-btn w-max m-0"
                       onClick={async () => {
-                        await stake(nft.address);
+                        setIsLoading(true);
+                        setLoadingMessage("Your NFT is staking");
+                        await stake(nft.address).then(() => stopLoading());
                       }}
                     >
                       Stake
@@ -816,12 +845,12 @@ export default function Stake() {
           {stakedNfts.map((nft, idx) => {
             return (
               <div className="custom-nft-card">
-                {/* <h4>{nft.name}</h4> */}
-                <h4>Hello</h4>
+                <h4>{nft.name}</h4>
+                {/* <h4>Hello</h4> */}
                 <div className="custom-nft-img-div" key={idx}>
                   <img
-                    // src={nft.image}
-                    src="https://images.pexels.com/photos/7738663/pexels-photo-7738663.jpeg?auto=compress&cs=tinysrgb&dpr=2&h=650&w=940"
+                    src={nft.image}
+                    // src="https://images.pexels.com/photos/7738663/pexels-photo-7738663.jpeg?auto=compress&cs=tinysrgb&dpr=2&h=650&w=940"
                     alt=""
                   />
                   {moment().unix() >
@@ -829,7 +858,9 @@ export default function Stake() {
                     <button
                       className="custom-btn w-max m-0"
                       onClick={async () => {
-                        // await unstake(nft.stakeData);
+                        setIsLoading(true);
+                        setLoadingMessage("Redeem in progress");
+                        await unstake(nft.stakeData).then(() => stopLoading());
                       }}
                     >
                       Redeem
