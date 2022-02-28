@@ -32,16 +32,16 @@ import axios from "axios";
 import Loader from "../components/Loader";
 
 let wallet: any;
-let conn = new Connection(clusterApiUrl("devnet"));
+let conn = new Connection(clusterApiUrl("mainnet-beta"));
 let notify: any;
 const {
   metadata: { Metadata },
 } = programs;
-const COLLECTION_NAME = "WOLF1";
+const COLLECTION_NAME = "Zoku";
 const TOKEN_METADATA_PROGRAM_ID = new anchor.web3.PublicKey(
   "metaqbxxUerdq28cj1RbAWkYQm3ybzjb6a8bt518x1s"
 );
-const programId = new PublicKey("GGmPSHAfqR5cQNVxvegoKLtyAjzEXLEzyq8f2fh4ysuq");
+const programId = new PublicKey("EnvYMhDHtBZzadw8NK5UfctRvcMgNH1PGT7KkAcDAyKD");
 const idl = require("./solana_anchor.json");
 const confirmOption: ConfirmOptions = {
   commitment: "finalized",
@@ -50,7 +50,7 @@ const confirmOption: ConfirmOptions = {
 };
 
 const REWARD_TOKEN = "Azw7nHFCUrY3i2RpRLxJja1mooiZkAai3ipsmQTeMqNQ";
-let POOL = new PublicKey("DYmvEKaRDK1agdYEjnfe9sk2SxNeJ4FXSAjWgedy2cEe");
+let POOL = new PublicKey("4F711h78UKj5TkaTPdWjW6WKYQnNN8dAUecccF8etRFH");
 const STAKEDATA_SIZE = 8 + 1 + 32 + 32 + 32 + 8 + 1;
 const createAssociatedTokenAccountInstruction = (
   associatedTokenAddress: anchor.web3.PublicKey,
@@ -559,9 +559,9 @@ export default function Stake() {
             placeholder="Reward Token"
             className="custom-input"
             onChange={(event) => {
-              setRewardAmount(Number(event.target.value));
+              setRewardToken(event.target.value);
             }}
-            value={rewardAmount}
+            value={rewardToken}
           />
         </div>
 
