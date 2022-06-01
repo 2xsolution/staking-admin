@@ -27,7 +27,7 @@ export default function App(){
       <WalletProvider wallets={wallets} autoConnect>
           <WalletModalProvider>
             <SnackbarProvider>
-              <div>
+              <div style={{textAlign: 'center', marginTop: '10px'}}>
                 <WalletConnect />
               </div>
               <Stake/>  

@@ -1,9 +1,30 @@
 {
-  "version": "0.0.0",
-  "name": "solana_anchor",
+  "version": "0.1.0",
+  "name": "daddy_staking_contract",
   "instructions": [
     {
-      "name": "initPool",
+      "name": "initialize",
+      "accounts": [
+        {
+          "name": "globalAuthority",
+          "isMut": true,
+          "isSigner": false
+        },
+        {
+          "name": "owner",
+          "isMut": true,
+          "isSigner": true
+        },
+        {
+          "name": "systemProgram",
+          "isMut": false,
+          "isSigner": false
+        }
+      ],
+      "args": []
+    },
+    {
+      "name": "initUserPool",
       "accounts": [
         {
           "name": "owner",
@@ -11,22 +32,12 @@
           "isSigner": true
         },
         {
-          "name": "pool",
+          "name": "userPool",
           "isMut": true,
           "isSigner": false
         },
         {
           "name": "rand",
-          "isMut": false,
-          "isSigner": false
-        },
-        {
-          "name": "rewardMint",
-          "isMut": false,
-          "isSigner": false
-        },
-        {
-          "name": "rewardAccount",
           "isMut": false,
           "isSigner": false
         },
@@ -38,29 +49,13 @@
       ],
       "args": [
         {
-          "name": "bump",
+          "name": "stakeMode",
           "type": "u8"
-        },
-        {
-          "name": "rewardAmount",
-          "type": "u64"
-        },
-        {
-          "name": "period",
-          "type": "i64"
-        },
-        {
-          "name": "withdrawable",
-          "type": "u8"
-        },
-        {
-          "name": "stakeCollection",
-          "type": "string"
         }
       ]
     },
     {
-      "name": "stake",
+      "name": "stakeNft",
       "accounts": [
         {
           "name": "owner",
@@ -68,22 +63,17 @@
           "isSigner": true
         },
         {
-          "name": "pool",
-          "isMut": false,
+          "name": "userPool",
+          "isMut": true,
           "isSigner": false
         },
         {
-          "name": "stakeData",
+          "name": "globalAuthority",
           "isMut": true,
-          "isSigner": true
+          "isSigner": false
         },
         {
           "name": "nftMint",
-          "isMut": true,
-          "isSigner": false
-        },
-        {
-          "name": "metadata",
           "isMut": true,
           "isSigner": false
         },
@@ -108,15 +98,24 @@
           "isSigner": false
         },
         {
-          "name": "clock",
+          "name": "rent",
           "isMut": false,
           "isSigner": false
         }
       ],
-      "args": []
+      "args": [
+        {
+          "name": "globalBump",
+          "type": "u8"
+        },
+        {
+          "name": "rarity",
+          "type": "u8"
+        }
+      ]
     },
     {
-      "name": "unstake",
+      "name": "unstakeNft",
       "accounts": [
         {
           "name": "owner",
@@ -124,12 +123,17 @@
           "isSigner": true
         },
         {
-          "name": "pool",
-          "isMut": false,
+          "name": "userPool",
+          "isMut": true,
           "isSigner": false
         },
         {
-          "name": "stakeData",
+          "name": "globalAuthority",
+          "isMut": true,
+          "isSigner": false
+        },
+        {
+          "name": "nftMint",
           "isMut": true,
           "isSigner": false
         },
@@ -147,17 +151,17 @@
           "name": "tokenProgram",
           "isMut": false,
           "isSigner": false
-        },
-        {
-          "name": "clock",
-          "isMut": false,
-          "isSigner": false
         }
       ],
-      "args": []
+      "args": [
+        {
+          "name": "globalBump",
+          "type": "u8"
+        }
+      ]
     },
     {
-      "name": "claim",
+      "name": "claimReward",
       "accounts": [
         {
           "name": "owner",
@@ -165,22 +169,27 @@
           "isSigner": true
         },
         {
-          "name": "pool",
-          "isMut": false,
-          "isSigner": false
-        },
-        {
-          "name": "stakeData",
+          "name": "userPool",
           "isMut": true,
           "isSigner": false
         },
         {
-          "name": "sourceRewardAccount",
+          "name": "globalAuthority",
           "isMut": true,
           "isSigner": false
         },
         {
-          "name": "destRewardAccount",
+          "name": "nftMint",
+          "isMut": true,
+          "isSigner": false
+        },
+        {
+          "name": "sourceAccount",
+          "isMut": true,
+          "isSigner": false
+        },
+        {
+          "name": "destAccount",
           "isMut": true,
           "isSigner": false
         },
@@ -188,19 +197,31 @@
           "name": "tokenProgram",
           "isMut": false,
           "isSigner": false
-        },
-        {
-          "name": "clock",
-          "isMut": false,
-          "isSigner": false
         }
       ],
-      "args": []
+      "args": [
+        {
+          "name": "globalBump",
+          "type": "u8"
+        }
+      ]
     }
   ],
   "accounts": [
     {
-      "name": "Pool",
+      "name": "GlobalPool",
+      "type": {
+        "kind": "struct",
+        "fields": [
+          {
+            "name": "totalNftCount",
+            "type": "u64"
+          }
+        ]
+      }
+    },
+    {
+      "name": "UserPool",
       "type": {
         "kind": "struct",
         "fields": [
@@ -213,64 +234,42 @@
             "type": "publicKey"
           },
           {
-            "name": "rewardMint",
-            "type": "publicKey"
+            "name": "itemCount",
+            "type": "u8"
           },
           {
-            "name": "rewardAccount",
-            "type": "publicKey"
+            "name": "nftMintList",
+            "type": {
+              "array": [
+                "publicKey",
+                10
+              ]
+            }
           },
           {
-            "name": "rewardAmount",
-            "type": "u64"
+            "name": "rarityList",
+            "type": {
+              "array": [
+                "u8",
+                10
+              ]
+            }
           },
           {
-            "name": "period",
+            "name": "rewardTime",
             "type": "i64"
           },
           {
-            "name": "withdrawable",
+            "name": "stakeMode",
             "type": "u8"
-          },
-          {
-            "name": "stakeCollection",
-            "type": "string"
-          },
-          {
-            "name": "bump",
-            "type": "u8"
-          }
-        ]
-      }
-    },
-    {
-      "name": "StakeData",
-      "type": {
-        "kind": "struct",
-        "fields": [
-          {
-            "name": "unstaked",
-            "type": "bool"
-          },
-          {
-            "name": "owner",
-            "type": "publicKey"
-          },
-          {
-            "name": "pool",
-            "type": "publicKey"
-          },
-          {
-            "name": "account",
-            "type": "publicKey"
           },
           {
             "name": "stakeTime",
             "type": "i64"
           },
           {
-            "name": "withdrawnNumber",
-            "type": "u8"
+            "name": "rewardAmount",
+            "type": "i64"
           }
         ]
       }
@@ -278,54 +277,47 @@
   ],
   "errors": [
     {
-      "code": 300,
-      "name": "TokenMintToFailed",
-      "msg": "Token mint to failed"
+      "code": 6000,
+      "name": "InvalidUserPool",
+      "msg": "Invalid User Pool"
     },
     {
-      "code": 301,
-      "name": "TokenSetAuthorityFailed",
-      "msg": "Token set authority failed"
+      "code": 6001,
+      "name": "InvalidPoolError",
+      "msg": "Invalid pool number"
     },
     {
-      "code": 302,
-      "name": "TokenTransferFailed",
-      "msg": "Token transfer failed"
+      "code": 6002,
+      "name": "InvalidNFTAddress",
+      "msg": "No Matching NFT to withdraw"
     },
     {
-      "code": 303,
-      "name": "InvalidTokenAccount",
-      "msg": "Invalid token account"
+      "code": 6003,
+      "name": "InvalidOwner",
+      "msg": "NFT Owner key mismatch"
     },
     {
-      "code": 304,
-      "name": "InvalidTokenMint",
-      "msg": "Invalid token mint"
+      "code": 6004,
+      "name": "InvalidWithdrawTime",
+      "msg": "Staking Locked Now"
     },
     {
-      "code": 305,
-      "name": "InvalidMetadata",
-      "msg": "Invalid metadata"
+      "code": 6005,
+      "name": "IndexOverflow",
+      "msg": "Withdraw NFT Index OverFlow"
     },
     {
-      "code": 306,
-      "name": "InvalidStakeData",
-      "msg": "Invalid stakedata account"
+      "code": 6006,
+      "name": "LackLamports",
+      "msg": "Insufficient Lamports"
     },
     {
-      "code": 307,
-      "name": "InvalidTime",
-      "msg": "Invalid time"
-    },
-    {
-      "code": 308,
-      "name": "InvalidPeriod",
-      "msg": "Invalid Period"
-    },
-    {
-      "code": 309,
-      "name": "AlreadyUnstaked",
-      "msg": "Already unstaked"
+      "code": 6007,
+      "name": "InvalidRewardAmount",
+      "msg": "Invalid reward amount"
     }
-  ]
+  ],
+  "metadata": {
+    "address": "A4RDTZxpskjCkY9mWgkovkx5aXUYEwZHJkQ6uWi1nWWH"
+  }
 }
